@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Building Certification</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏢</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2ECC71 0%, #27AE60 50%, #16A085 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .status-card {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            text-align: center;
+        }
+
+        .wallet-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .connect-btn {
+            background: linear-gradient(135deg, #FF6B6B, #ee5a52);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .connect-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .connect-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .form-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .certification-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .level-badge {
+            padding: 10px 15px;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .bronze { background: linear-gradient(135deg, #CD7F32, #B8860B); color: white; }
+        .silver { background: linear-gradient(135deg, #C0C0C0, #A9A9A9); color: white; }
+        .gold { background: linear-gradient(135deg, #FFD700, #FFA500); color: black; }
+        .platinum { background: linear-gradient(135deg, #E5E4E2, #B0C4DE); color: black; }
+
+        .buildings-list {
+            margin-top: 30px;
+        }
+
+        .building-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .building-item h4 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .building-item p {
+            color: #666;
+            margin: 2px 0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #c62828;
+            margin: 10px 0;
+        }
+
+        .success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #2e7d32;
+            margin: 10px 0;
+        }
+
+        .contract-info {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .contract-info h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+        }
+
+        .action-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .form-section {
+                grid-template-columns: 1fr;
+            }
+
+            .certification-levels {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 Privacy Building Certification</h1>
+            <p>Confidential Green Building Assessment & Energy Efficiency Certification</p>
+        </div>
+
+        <div class="card status-card">
+            <h2>🔒 Privacy-First Certification</h2>
+            <p>Your building data is fully encrypted using Zama's Fully Homomorphic Encryption (FHE)</p>
+            <div class="certification-levels">
+                <div class="level-badge bronze">Bronze (100+)</div>
+                <div class="level-badge silver">Silver (200+)</div>
+                <div class="level-badge gold">Gold (350+)</div>
+                <div class="level-badge platinum">Platinum (500+)</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="wallet-section">
+                <button id="connectWallet" class="connect-btn">🔌 Connect Wallet</button>
+                <div id="walletInfo" style="margin-top: 15px; display: none;">
+                    <p><strong>Connected:</strong> <span id="walletAddress"></span></p>
+                    <p><strong>Network:</strong> <span id="networkName"></span></p>
+                </div>
+            </div>
+
+            <div class="contract-info">
+                <h3>📋 Contract Information</h3>
+                <p><strong>Ethers.js Status:</strong> <span id="ethersStatus">Loading...</span></p>
+                <p><strong>Contract Address:</strong> <span id="contractAddress">Not set - Please update CONTRACT_ADDRESS in the code</span></p>
+                <p><strong>Total Buildings:</strong> <span id="totalBuildings">-</span></p>
+                <p><strong>Contract Owner:</strong> <span id="contractOwner">-</span></p>
+                <p><strong>Certification Authority:</strong> <span id="certificationAuthority">-</span></p>
+            </div>
+
+            <div class="action-buttons">
+                <button id="loadContractStats" class="action-btn" disabled>📊 Load Contract Stats</button>
+                <button id="calculateScore" class="action-btn" disabled>🧮 Calculate Score</button>
+                <button id="verifyBuilding" class="action-btn" disabled>✅ Verify Building</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🏗️ Submit Building for Certification</h2>
+            <form id="buildingForm">
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="energyConsumption">Energy Consumption (kWh/year)</label>
+                        <input type="number" id="energyConsumption" required min="0" placeholder="e.g., 25000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="waterUsage">Water Usage (liters/year)</label>
+                        <input type="number" id="waterUsage" required min="0" placeholder="e.g., 50000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="wasteGeneration">Waste Generation (kg/year)</label>
+                        <input type="number" id="wasteGeneration" required min="0" placeholder="e.g., 2000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="insulation">Insulation Quality (1-10)</label>
+                        <input type="number" id="insulation" required min="1" max="10" placeholder="e.g., 8">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hvacEfficiency">HVAC Efficiency (1-10)</label>
+                        <input type="number" id="hvacEfficiency" required min="1" max="10" placeholder="e.g., 7">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lightingEfficiency">Lighting Efficiency (1-10)</label>
+                        <input type="number" id="lightingEfficiency" required min="1" max="10" placeholder="e.g., 9">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="carbonFootprint">Carbon Footprint (CO2 kg/year)</label>
+                        <input type="number" id="carbonFootprint" required min="0" placeholder="e.g., 15000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="renewableEnergyPercent">Renewable Energy % (0-100)</label>
+                        <input type="number" id="renewableEnergyPercent" required min="0" max="100" placeholder="e.g., 30">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="buildingType">Building Type</label>
+                        <select id="buildingType" required>
+                            <option value="">Select building type</option>
+                            <option value="0">Residential</option>
+                            <option value="1">Commercial</option>
+                            <option value="2">Industrial</option>
+                            <option value="3">Mixed Use</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="buildingSize">Building Size (m²)</label>
+                        <input type="number" id="buildingSize" required min="1" placeholder="e.g., 1000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Location (City/Region)</label>
+                        <input type="text" id="location" required placeholder="e.g., New York, NY">
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBuilding" class="submit-btn" disabled>
+                    🚀 Submit Building Data (Encrypted)
+                </button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>🏆 My Building Certifications</h2>
+            <button id="loadBuildings" class="submit-btn" disabled>🔍 Load My Buildings</button>
+            <div id="buildingsList" class="buildings-list"></div>
+        </div>
+
+        <div id="messages"></div>
+    </div>
+
+    <!-- Ethers.js v6 CDN with multiple fallbacks -->
+    <script src="https://unpkg.com/ethers@6.9.0/dist/ethers.umd.min.js"
+            onload="console.log('Primary CDN loaded successfully'); if(typeof ethers !== 'undefined') document.getElementById('ethersStatus').textContent = '✅ Loaded v' + ethers.version;"
+            onerror="loadEthersFallback()"></script>
+    <script>
+        function loadEthersFallback() {
+            console.log('Primary CDN failed, trying fallback...');
+            document.getElementById('ethersStatus').textContent = '⏳ Trying fallback CDN...';
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/ethers@6.9.0/dist/ethers.umd.min.js';
+            script.onload = function() {
+                console.log('Fallback CDN loaded successfully');
+                document.getElementById('ethersStatus').textContent = '✅ Loaded v' + ethers.version + ' (fallback)';
+            };
+            script.onerror = function() {
+                console.log('Secondary CDN failed, trying third fallback...');
+                document.getElementById('ethersStatus').textContent = '⏳ Trying 2nd fallback...';
+                const script2 = document.createElement('script');
+                script2.src = 'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.9.0/ethers.umd.min.js';
+                script2.onload = function() {
+                    console.log('Third CDN loaded successfully');
+                    document.getElementById('ethersStatus').textContent = '✅ Loaded v' + ethers.version + ' (2nd fallback)';
+                };
+                script2.onerror = function() {
+                    console.error('All CDNs failed. Please check your internet connection.');
+                    document.getElementById('ethersStatus').textContent = '❌ All CDNs failed';
+                    showMessage('Failed to load Ethers.js library. Please check your internet connection and refresh the page.', 'error');
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script);
+        }
+    </script>
+
+    <script>
+        let provider;
+        let signer;
+        let account;
+        let contract;
+
+        // IMPORTANT: Replace with your deployed contract address
+        const CONTRACT_ADDRESS = "0xDd7dc21354032FC6d1BBF2F38c4d09A9Ec54a40C"; // FHE version deployed on Sepolia
+
+        // Certification Authority Address
+        const AUTHORITY_ADDRESS = "0x527352c99714ddF4B93543D0AB30E792FD45dde3";
+
+        const CONTRACT_ABI = [
+            {
+                "inputs": [{"internalType": "address", "name": "_authority", "type": "address"}],
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {"indexed": true, "internalType": "uint256", "name": "id", "type": "uint256"},
+                    {"indexed": false, "internalType": "address", "name": "owner", "type": "address"}
+                ],
+                "name": "BuildingSubmitted",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [{"indexed": false, "internalType": "uint256", "name": "id", "type": "uint256"}],
+                "name": "BuildingVerified",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {"indexed": false, "internalType": "uint256", "name": "id", "type": "uint256"},
+                    {"indexed": false, "internalType": "uint256", "name": "score", "type": "uint256"}
+                ],
+                "name": "ScoreCalculated",
+                "type": "event"
+            },
+            {
+                "inputs": [],
+                "name": "owner",
+                "outputs": [{"internalType": "address", "name": "", "type": "address"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "authority",
+                "outputs": [{"internalType": "address", "name": "", "type": "address"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "totalBuildings",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "name": "buildingOwner",
+                "outputs": [{"internalType": "address", "name": "", "type": "address"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "name": "verified",
+                "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "uint256", "name": "id", "type": "uint256"}],
+                "name": "score",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {"internalType": "uint32", "name": "_energy", "type": "uint32"},
+                    {"internalType": "uint8", "name": "_efficiency", "type": "uint8"}
+                ],
+                "name": "submitBuilding",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "uint256", "name": "id", "type": "uint256"}],
+                "name": "verifyBuilding",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "uint256", "name": "id", "type": "uint256"}],
+                "name": "calculateScore",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "uint256", "name": "id", "type": "uint256"}],
+                "name": "getScore",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "newAuthority", "type": "address"}],
+                "name": "changeAuthority",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }
+        ];
+
+        async function initEthers() {
+            if (typeof ethers === 'undefined') {
+                throw new Error('Ethers.js not loaded. Please check your internet connection.');
+            }
+            if (typeof window.ethereum !== 'undefined') {
+                provider = new ethers.BrowserProvider(window.ethereum);
+                return true;
+            }
+            return false;
+        }
+
+        async function connectWallet() {
+            try {
+                if (!await initEthers()) {
+                    showMessage('Please install MetaMask!', 'error');
+                    return;
+                }
+
+                const accounts = await window.ethereum.request({
+                    method: 'eth_requestAccounts'
+                });
+
+                account = accounts[0];
+                signer = await provider.getSigner();
+
+                // Initialize contract
+                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+                // Update UI
+                document.getElementById('walletAddress').textContent =
+                    account.slice(0, 6) + '...' + account.slice(-4);
+                document.getElementById('networkName').textContent = await getNetworkName();
+                document.getElementById('contractAddress').textContent = CONTRACT_ADDRESS;
+                document.getElementById('walletInfo').style.display = 'block';
+                document.getElementById('connectWallet').textContent = '✅ Connected';
+                document.getElementById('connectWallet').disabled = true;
+
+                // Enable buttons
+                document.getElementById('submitBuilding').disabled = false;
+                document.getElementById('loadBuildings').disabled = false;
+                document.getElementById('loadContractStats').disabled = false;
+                document.getElementById('calculateScore').disabled = false;
+                document.getElementById('verifyBuilding').disabled = false;
+
+                showMessage('Wallet connected successfully!', 'success');
+
+                // Auto-load contract stats
+                await loadContractStats();
+
+            } catch (error) {
+                console.error('Error connecting wallet:', error);
+                showMessage('Failed to connect wallet: ' + error.message, 'error');
+            }
+        }
+
+        async function getNetworkName() {
+            const network = await provider.getNetwork();
+            switch (Number(network.chainId)) {
+                case 1: return 'Ethereum Mainnet';
+                case 11155111: return 'Sepolia Testnet';
+                case 31337: return 'Local Network';
+                default: return `Chain ID: ${network.chainId}`;
+            }
+        }
+
+        async function loadContractStats() {
+            if (!contract) {
+                showMessage('Please connect your wallet first!', 'error');
+                return;
+            }
+
+            try {
+                const totalBuildings = await contract.totalBuildings();
+                const authority = await contract.authority();
+                const owner = await contract.owner();
+
+                document.getElementById('totalBuildings').textContent = totalBuildings.toString();
+                document.getElementById('certificationAuthority').textContent = authority;
+                document.getElementById('contractOwner').textContent = owner;
+
+                showMessage('Contract stats loaded successfully!', 'success');
+            } catch (error) {
+                console.error('Error loading contract stats:', error);
+                showMessage('Failed to load contract stats: ' + error.message, 'error');
+            }
+        }
+
+        async function submitBuilding(event) {
+            event.preventDefault();
+
+            if (!account || !contract) {
+                showMessage('Please connect your wallet first!', 'error');
+                return;
+            }
+
+            try {
+                document.getElementById('submitBuilding').disabled = true;
+                document.getElementById('submitBuilding').textContent = '⏳ Submitting...';
+
+                // Get form data and calculate simplified metrics
+                const energyConsumption = parseInt(document.getElementById('energyConsumption').value);
+                const insulation = parseInt(document.getElementById('insulation').value);
+                const hvacEfficiency = parseInt(document.getElementById('hvacEfficiency').value);
+                const lightingEfficiency = parseInt(document.getElementById('lightingEfficiency').value);
+
+                // Calculate average efficiency (0-10 scale, convert to 0-100)
+                const avgEfficiency = Math.floor((insulation + hvacEfficiency + lightingEfficiency) / 3 * 10);
+
+                // Normalize energy to uint32 range (simplified for demo)
+                const normalizedEnergy = Math.min(energyConsumption, 4294967295);
+
+                showMessage('Encrypting and submitting data...', 'success');
+
+                // Submit transaction with encrypted values
+                const tx = await contract.submitBuilding(
+                    normalizedEnergy,
+                    avgEfficiency
+                );
+
+                showMessage('Transaction submitted! Waiting for confirmation...', 'success');
+
+                const receipt = await tx.wait();
+                showMessage('Building data submitted successfully! Transaction: ' + receipt.hash, 'success');
+
+                // Reset form
+                document.getElementById('buildingForm').reset();
+
+                // Reload contract stats
+                await loadContractStats();
+
+            } catch (error) {
+                console.error('Error submitting building:', error);
+                showMessage('Failed to submit building: ' + error.message, 'error');
+            } finally {
+                document.getElementById('submitBuilding').disabled = false;
+                document.getElementById('submitBuilding').textContent = '🚀 Submit Building Data (Encrypted)';
+            }
+        }
+
+        async function loadBuildings() {
+            if (!account || !contract) {
+                showMessage('Please connect your wallet first!', 'error');
+                return;
+            }
+
+            try {
+                document.getElementById('loadBuildings').disabled = true;
+                document.getElementById('loadBuildings').textContent = '⏳ Loading...';
+                document.getElementById('buildingsList').innerHTML = '<div class="loading">Loading your buildings...</div>';
+
+                // Get total buildings
+                const totalBuildings = await contract.totalBuildings();
+
+                if (totalBuildings == 0) {
+                    document.getElementById('buildingsList').innerHTML = '<p>No buildings found. Submit your first building above!</p>';
+                    return;
+                }
+
+                let buildingsHTML = '';
+                let foundBuildings = 0;
+
+                // Iterate through all buildings and find user's buildings
+                for (let i = 1; i <= totalBuildings; i++) {
+                    try {
+                        const owner = await contract.buildingOwner(i);
+
+                        if (owner.toLowerCase() === account.toLowerCase()) {
+                            foundBuildings++;
+                            const isVerified = await contract.verified(i);
+                            const buildingScore = await contract.score(i);
+
+                            let certLevel = 'None';
+                            if (buildingScore >= 500) certLevel = 'Platinum';
+                            else if (buildingScore >= 350) certLevel = 'Gold';
+                            else if (buildingScore >= 200) certLevel = 'Silver';
+                            else if (buildingScore >= 100) certLevel = 'Bronze';
+
+                            buildingsHTML += `
+                                <div class="building-item">
+                                    <h4>Building #${i}</h4>
+                                    <p><strong>Owner:</strong> ${owner.slice(0, 6)}...${owner.slice(-4)}</p>
+                                    <p><strong>Verified:</strong> ${isVerified ? '✅ Yes' : '⏳ Pending'}</p>
+                                    <p><strong>Score:</strong> ${buildingScore > 0 ? buildingScore.toString() : 'Not calculated'}</p>
+                                    <p><strong>Certification Level:</strong> ${certLevel}</p>
+                                </div>
+                            `;
+                        }
+                    } catch (e) {
+                        console.log('Error loading building', i, e);
+                    }
+                }
+
+                if (foundBuildings === 0) {
+                    document.getElementById('buildingsList').innerHTML = '<p>No buildings found for your address. Submit your first building above!</p>';
+                } else {
+                    document.getElementById('buildingsList').innerHTML = buildingsHTML;
+                }
+
+            } catch (error) {
+                console.error('Error loading buildings:', error);
+                document.getElementById('buildingsList').innerHTML = '<div class="error">Failed to load buildings: ' + error.message + '</div>';
+            } finally {
+                document.getElementById('loadBuildings').disabled = false;
+                document.getElementById('loadBuildings').textContent = '🔍 Load My Buildings';
+            }
+        }
+
+        async function calculateScore() {
+            if (!account || !contract) {
+                showMessage('Please connect your wallet first!', 'error');
+                return;
+            }
+
+            const buildingId = prompt('Enter Building ID to calculate score:');
+            if (!buildingId) return;
+
+            try {
+                showMessage('Calculating score...', 'success');
+                const tx = await contract.calculateScore(buildingId);
+                const receipt = await tx.wait();
+                showMessage('Score calculation initiated! Transaction: ' + receipt.hash, 'success');
+            } catch (error) {
+                console.error('Error calculating score:', error);
+                showMessage('Failed to calculate score: ' + error.message, 'error');
+            }
+        }
+
+        async function verifyBuilding() {
+            if (!account || !contract) {
+                showMessage('Please connect your wallet first!', 'error');
+                return;
+            }
+
+            const buildingId = prompt('Enter Building ID to verify (Certification Authority only):');
+            if (!buildingId) return;
+
+            try {
+                showMessage('Verifying building...', 'success');
+                const tx = await contract.verifyBuilding(buildingId);
+                const receipt = await tx.wait();
+                showMessage('Building verified! Transaction: ' + receipt.hash, 'success');
+            } catch (error) {
+                console.error('Error verifying building:', error);
+                showMessage('Failed to verify building: ' + error.message, 'error');
+            }
+        }
+
+        function showMessage(message, type = 'info') {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type;
+            messageDiv.textContent = message;
+            messagesDiv.appendChild(messageDiv);
+
+            // Remove message after 5 seconds
+            setTimeout(() => {
+                if (messagesDiv.contains(messageDiv)) {
+                    messagesDiv.removeChild(messageDiv);
+                }
+            }, 5000);
+        }
+
+        // Event listeners
+        document.getElementById('connectWallet').addEventListener('click', connectWallet);
+        document.getElementById('buildingForm').addEventListener('submit', submitBuilding);
+        document.getElementById('loadBuildings').addEventListener('click', loadBuildings);
+        document.getElementById('loadContractStats').addEventListener('click', loadContractStats);
+        document.getElementById('calculateScore').addEventListener('click', calculateScore);
+        document.getElementById('verifyBuilding').addEventListener('click', verifyBuilding);
+
+        // Auto-connect if already connected
+        window.addEventListener('load', async () => {
+            // Wait a bit for ethers to load if needed
+            let attempts = 0;
+            while (typeof ethers === 'undefined' && attempts < 50) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                attempts++;
+            }
+
+            if (typeof ethers === 'undefined') {
+                document.getElementById('ethersStatus').textContent = '❌ Failed to load';
+                showMessage('Failed to load Ethers.js library. Please refresh the page.', 'error');
+                return;
+            } else {
+                document.getElementById('ethersStatus').textContent = '✅ Loaded v' + ethers.version;
+            }
+
+            try {
+                if (await initEthers()) {
+                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                    if (accounts.length > 0) {
+                        // User was already connected, you can auto-connect here if desired
+                    }
+                }
+            } catch (error) {
+                console.error('Error during initialization:', error);
+            }
+        });
+    </script>
+</body>
+</html>
